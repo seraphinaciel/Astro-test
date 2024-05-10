@@ -1,0 +1,42 @@
+/// Path
+/// @type String
+$base-url: "../images/";
+
+/// Color
+/// @type Color
+$c-text: #222;
+$light-grey: rgb(237 237 237) !default;
+$mid-grey: rgb(153 153 153) !default;
+$dark-grey: rgb(68 68 68) !default;
+
+/// Container's width
+/// @type Length
+$medium: 750 !default;
+$large: 768;
+$xlarge: 1200;
+$xxlarge: 1400;
+$wide: 1920;
+
+/// Breakpoints map
+/// @prop {String} keys
+/// @prop {Map} values
+$breakpoints: (
+    "s": (
+        max-width: 320px,
+    ),
+    "m": (
+        max-width: #{$medium}px,
+    ),
+    "l": (
+        max-width: #{$large}px,
+    ),
+    "xl": (
+        max-width: #{$xlarge}px,
+    ),
+    "xxl": (
+        max-width: #{$xxlarge}px,
+    ),
+    "wide": (
+        max-width: #{$wide}px,
+    ),
+) !default;

@@ -1,0 +1,97 @@
+@use "sass:math";
+@use "sass:list";
+@use "sass:map";
+
+/// Native `url(..)` function wrapper
+/// @param {String} $base - base URL for the asset
+/// @param {String} $type - asset type folder (e.g. `fonts/`)
+/// @param {String} $path - asset path
+/// @return {Url}
+
+@function asset($base, $path) {
+    @return url($base + $path);
+}
+
+/// Returns URL to an image based on its path
+/// @param {String} $path - image path
+/// @param {String} $base [$base-url] - base URL
+/// @return {Url}
+/// @require $base-url
+@function img($path, $base: $base-url) {
+    @return asset($base, $path);
+}
+
+/// Returns URL to a font based on its path
+/// @param {String} $path - font path
+/// @param {String} $base [$base-url] - base URL
+/// @return {Url}
+/// @require $base-url
+// @function font($path, $base: $base-url) {
+//   @return asset($base, "fonts/", $path);
+// }
+
+// 3 Decimal places
+@function decimal-round($point) {
+    @return math.div(math.round($point * 1000), 1000);
+}
+
+// Gap percentage
+@function gap-ps($gap, $parent) {
+    @return decimal-round(calc($gap / $parent * 100%));
+}
+
+@function gap-vw($gap, $parent) {
+    @return decimal-round(calc($gap / $parent * 100vw));
+}
+
+@function gap-cqi($gap, $parent) {
+    @return decimal-round(calc($gap / $parent * 100cqi));
+}
+
+@function gap-in($gap, $parent, $unit: null) {
+    $pref: "";
+
+    @if $unit == ps {
+        $pref: gap-ps($gap, $parent);
+    } @else if $unit == vw {
+        $pref: gap-vw($gap, $parent);
+    } @else {
+        $pref: gap-cqi($gap, $parent);
+    }
+
+    @if $gap < 0 {
+        @return max($pref, #{$gap}px);
+    } @else {
+        @return clamp(1px, $pref, #{$gap}px);
+    }
+}
+
+// Gap in width
+@function gap-width($child, $parent) {
+    $gap: calc(($parent - $child) / 2);
+    @return decimal-round(calc($gap / $parent * 100%));
+}
+
+// width size
+/// @param {Number} $child
+/// @param {Number} $parent
+/// @return {Number} - result
+@function size-w($child, $parent) {
+    @return decimal-round(calc($child / $parent) * 100vw);
+}
+
+// img
+@function ratio($ratio-w, $ratio-h) {
+    @return calc(100% / $ratio-w * $ratio-h);
+}
+
+/// Remove the unit of a length
+/// @param {Number} $number - Number to remove unit from
+/// @return {Number} - Unitless number
+@function strip-unit($number) {
+    @if meta.type-of($number) == "number" and not math.unitless($number) {
+        @return math.div($number, $number * 0 + 1);
+    }
+
+    @return $number;
+}

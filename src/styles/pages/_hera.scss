@@ -1,0 +1,115 @@
+@charset "UTF-8";
+
+@use "../common" as *;
+@use "../components/buttons" as *;
+@use "../components/swiper" as *;
+
+.ap-post {
+    $hera-font: ();
+    @each $key, $value in $hera {
+        $hera-font: list.append($hera-font, $value, comma);
+    }
+
+    font-family: $hera-font;
+
+    * {
+        padding: 0;
+        margin: 0;
+        font-style: normal;
+        word-break: keep-all;
+        list-style: none;
+    }
+
+    em {
+        color: inherit;
+        background-color: transparent;
+    }
+
+    .ap-section {
+        &__header,
+        &__body {
+            width: min(100vw, $wide + 0px);
+            margin: auto;
+        }
+    }
+
+    .pc-only {
+        display: block;
+        @include respond-to(m) {
+            display: none;
+        }
+    }
+
+    .mo-only {
+        display: none;
+        @include respond-to(m) {
+            display: block;
+        }
+    }
+
+    .ap-video {
+        video {
+            width: 100%;
+            height: 100%;
+            mask-image: radial-gradient(#fff, #000);
+            backface-visibility: hidden;
+        }
+    }
+
+    .video__controller {
+        position: relative;
+
+        .video__poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+            transition: opacity 0.3s linear;
+            @include pos-abs($l: 0);
+        }
+
+        &.is-loaded {
+            .video {
+                position: relative;
+                z-index: 2;
+            }
+
+            .video__poster {
+                z-index: 1;
+                opacity: 0;
+            }
+        }
+    }
+
+    .ap-image {
+        img {
+            max-width: 100%;
+        }
+
+        &__caption {
+            strong {
+                font-weight: 900;
+            }
+        }
+    }
+
+    .ap-list__num {
+        counter-reset: number 0;
+
+        // counter-reset: number;
+
+        .num--items {
+            position: relative;
+
+            &::after {
+                // content: counter(number);
+                // counter-increment: number;
+                display: block;
+                content: counter(number) ". ";
+                counter-increment: number;
+
+                @include pos-xy(0, $y: -50%);
+            }
+        }
+    }
+}

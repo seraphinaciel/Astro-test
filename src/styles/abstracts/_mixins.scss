@@ -1,0 +1,288 @@
+@use "functions" as *;
+@use "variables" as *;
+@use "sass:meta";
+@use "sass:math";
+@use "sass:list";
+@use "sass:map";
+
+// ============================================================
+// Media query * max : @include respond-to(m) {color: blue;}
+//             * min : @include respond-to(700) {color: blue;}
+// breakpoint : s, m, l, xl, xxl
+// ============================================================
+@mixin respond-to($breakpoint) {
+    $raw-query: map.get($breakpoints, $breakpoint);
+
+    @if $raw-query {
+        $query: if(type-of($raw-query) == "string", unquote($raw-query), meta.inspect($raw-query));
+
+        @media #{$query} {
+            @content;
+        }
+    } @else {
+        @media (min-width:#{$breakpoint + 0px}) {
+            @content;
+        }
+        // @error '`#{$breakpoint}` 값을 찾을 수 없습니다.';
+    }
+}
+
+// ============================================================
+// Media query * max : @include container(button, m) {color: blue;}
+//             * min : @include container(button, 200) {color: blue;}
+// breakpoint : s, m, l, xl, xxl
+// ============================================================
+@mixin container($name, $breakpoint) {
+    $raw-query: map.get($breakpoints, $breakpoint);
+
+    @if $raw-query {
+        $query: if(type-of($raw-query) == "string", unquote($raw-query), meta.inspect($raw-query));
+
+        @container #{$name} #{$query} {
+            @content;
+        }
+    } @else {
+        @container #{$name} (min-width:#{$breakpoint + 0px}) {
+            @content;
+        }
+        // @error '`#{$breakpoint}` 값을 찾을 수 없습니다.';
+    }
+}
+
+// ============================================================
+// Clamp *  @include clamp(width, 1rem, 150px, 768);
+// Clamp * em * @include clamp(width, 1em, 31.25(em값) * 16px(부모값), $wide);
+// ============================================================
+
+@mixin clamp($attr, $min, $max, $container) {
+    $pref: decimal-round(math.div(strip-unit($max) * 100cqi, $container));
+
+    @if (math.unit($min) == "em") {
+        $pref: decimal-round(math.div(strip-unit($max) * 100%, $container));
+    }
+
+    #{$attr}: clamp(#{$min}, #{$pref}, #{$max});
+}
+
+// ============================================================
+//  Font * @include fonts($medium, 80, $line: 90);
+// ============================================================
+
+@mixin fonts($view, $size: $base-font-size, $weight: null, $line: 1) {
+    $font-size: gap-cqi($size, $view);
+
+    font: {
+        size: $font-size;
+        size: clamp(9px, $font-size, $size * 1px);
+        weight: $weight;
+    }
+
+    @if ($line == 1) {
+        line-height: $line;
+    } @else {
+        line-height: math.div($line, $size);
+    }
+
+    @content;
+}
+
+// ============================================================
+//  Font * @include font-set(118, 80, $line: 90);
+// ============================================================
+@mixin font-set($size: $base-font-size, $mo-size: $size, $weight: null, $line: 1) {
+    @include fonts($wide, $size, $weight, $line) {
+        @if ($mo-size != $size) {
+            @include respond-to(m) {
+                $font-size: gap-cqi($mo-size, $medium);
+
+                font: {
+                    size: $font-size;
+                    size: clamp(11px, $font-size, $mo-size * 1px);
+                }
+            }
+        }
+    }
+}
+
+// ============================================================
+// Flex * @include flex(end, center);
+// ============================================================
+@mixin flex($justify: null, $align: null) {
+    @if ($justify == null & $align == null) {
+        place-content: center;
+    }
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    @content;
+}
+@mixin flex-column($justify: center, $align: center) {
+    @include flex($justify, $align) {
+        flex-direction: column;
+    }
+
+    @content;
+}
+
+// ============================================================
+// Grid * @include grid(repeat(3, 1fr), $place:center);
+// ============================================================
+@mixin grid($columns, $justify: null, $align: null, $place: null) {
+    display: grid;
+    grid-template-columns: $columns;
+    justify-items: $justify;
+    align-items: $align;
+    place-items: $place;
+    @content;
+}
+@mixin grid-rows($columns, $rows, $justify: null, $align: null, $place: null) {
+    @include grid($columns, $justify, $align, $place) {
+        grid-template-rows: $rows;
+    }
+
+    @content;
+}
+
+// ============================================================
+// Position * @include pos-abs($x: 10px, $y: 10px, $r: 10px, $b: 10px, $z: 1);
+// ============================================================
+@mixin pos-null {
+    position: static;
+    transform: translate(0);
+}
+@mixin pos-abs($t: 0, $r: null, $b: null, $l: null, $z: null) {
+    position: absolute;
+    top: $t;
+    right: $r;
+    bottom: $b;
+    left: $l;
+    z-index: $z;
+    @content;
+}
+@mixin pos-x($t: null, $z: null) {
+    @include pos-abs($t, $l: 50%, $z: $z) {
+        transform: translateX(-50%);
+    }
+}
+@mixin pos-y($l: null, $z: null) {
+    @include pos-abs($t: 50%, $l: $l, $z: $z) {
+        transform: translateY(-50%);
+    }
+}
+@mixin pos-xy($t: 50%, $l: 50%, $x: -50%, $y: -50%, $z: null) {
+    @include pos-abs($t, $l: $l, $z: $z) {
+        transform: translate($x, $y);
+    }
+}
+@mixin pos-z($z: 0) {
+    position: relative;
+    z-index: $z;
+}
+
+// ============================================================
+// Background image * @include img(100px, 100px, $ico-kakao) { text-indent : -99999em; };
+// @include img($url: img("name.png"));
+// ============================================================
+@mixin img($w: null, $h: null, $url, $x: null, $y: null, $ob: null, $size: null) {
+    width: $w;
+    height: $h;
+    background-image: $url;
+    background-repeat: no-repeat;
+    background-position-x: $x;
+    background-position-y: $y;
+    object-fit: $ob;
+    background-size: $size;
+    @content;
+}
+
+// ============================================================
+// Background image * @include img(100px, 100px, $ico-kakao) { text-indent : -99999em; };
+// 21:9, 4:3, 16:10, 16:9, 9:16
+// ============================================================
+
+// aspect ratio
+@mixin fixed-to-video($width, $height, $auto: null) {
+    aspect-ratio: $auto math.div($width, $height);
+    line-height: 0;
+
+    img,
+    video,
+    source,
+    iframe {
+        // @include pos-abs;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+// 옛방식
+@mixin image-to-test($width, $height, $min-height) {
+    position: relative;
+    @include clamp(max-width, 10, $width, $wide);
+    padding-top: clamp(
+        #{$min-height}px,
+        decimal-round(calc(100% * $width / $height)),
+        #{$height}px
+    );
+
+    img,
+    video,
+    source,
+    iframe {
+        @include pos-abs;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+@mixin max-width($width) {
+    max-width: $width + 0px;
+    padding: 0 gap-width($width, $wide);
+    margin: auto;
+    text-align: center;
+
+    @include respond-to(m) {
+        padding: 0 gap-in(60, $medium);
+    }
+}
+
+// balck cushion
+@mixin bullet-style($background) {
+    width: 0.1px;
+    height: 0.1px;
+    padding: 0.5em;
+    border-radius: 50%;
+    margin-left: 0.5em;
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    background: $background;
+}
+
+@mixin pseudo($w: 100%, $h: 100%, $display: inline-block, $content: "") {
+    content: $content;
+    width: $w;
+    height: $h;
+    display: $display;
+}
+
+@mixin event($self: false) {
+    @if $self {
+        &,
+        &:hover,
+        &:active,
+        &:focus,
+        &:focus-within {
+            @content;
+        }
+    } @else {
+        &:hover,
+        &:active,
+        &:focus,
+        &:focus-within {
+            @content;
+        }
+    }
+}

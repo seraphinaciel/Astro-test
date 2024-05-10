@@ -1,0 +1,80 @@
+/// Font family
+$base-font-size: 24 !default;
+$line-height: 1.6 !default;
+
+// hera - story
+$hera: (
+    mont: "Montserrat",
+    noto: "NotoSans",
+    default: (
+        "Malgun Gothic",
+        "맑은 고딕",
+        "Nanum Gothic",
+        "나눔 고딕",
+        돋움,
+        dotum,
+        sans-serif,
+    ),
+);
+$laneige: (
+    kr: (
+        "Gellix",
+        "NotoSansKR",
+        "NotoSansCJK",
+        "Arita",
+    ),
+    id: (
+        "Gellix",
+        "arm",
+        "AppleGothic",
+    ),
+    jp: (
+        "Gellix",
+        "Arita",
+        "noto sans JP",
+    ),
+    hk: (
+        "Gellix",
+        "Noto Sans TC",
+        "Microsoft Yahei",
+    ),
+    tw: (
+        "Gellix",
+        "Noto Sans TC",
+        "Microsoft Yahei",
+    ),
+    sg: (
+        "Gellix",
+        "Helvetica",
+        "Helvetica Neue",
+        "Arial",
+        "Lucida Grande",
+    ),
+    ph: (
+        "Gellix",
+        "Helvetica",
+        "Helvetica Neue",
+        "Arial",
+        "Lucida Grande",
+    ),
+    th: (
+        "Gellix",
+        noto sans thai,
+        "Helvetica",
+        "Helvetica Neue",
+        "Arial",
+        "Lucida Grande",
+    ),
+    int: (
+        "Gellix",
+        "Arita",
+    ),
+    my: (
+        "Gellix",
+        "Arita",
+    ),
+    vn: (
+        "Pretendard-fullset",
+        "Arial",
+    ),
+);

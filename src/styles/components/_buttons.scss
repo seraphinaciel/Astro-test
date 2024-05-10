@@ -1,0 +1,68 @@
+// todo 헤라 스토리와 다른 게 나오면 pages/hera에 따로 넣어버리기
+
+@use "../common" as *;
+
+@mixin ap-button($bg: black, $color: white) {
+    display: inline-block;
+    color: $color;
+    background-color: $bg;
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+        color: $bg;
+        background-color: transparent;
+        box-shadow: 0 0 0 2px $bg inset;
+    }
+
+    @content;
+}
+
+.ap-post {
+    container: button / inline-size;
+
+    //   font-size: 1px;
+    .ap-button {
+        @include ap-button;
+
+        padding: gap-vw(30, $wide) gap-vw(80, $wide);
+        margin-top: 40px;
+
+        span {
+            @include font-set(50, 30);
+        }
+
+        @include respond-to(m) {
+            padding: gap-vw(22, $medium) gap-vw(50, $medium);
+            margin-top: gap-vw(50, $medium);
+        }
+    }
+
+    // .ap-button--more {
+    // }
+
+    .ap-button--arrow {
+        &::after {
+            display: inline-block;
+            width: $size;
+            height: $size;
+            margin-left: 0.1333vw;
+            content: "";
+            border: 0.16vw solid #fff;
+            transform: rotate(45deg);
+
+            $size: calc(1.302vw / 2);
+            border: {
+                bottom: 0;
+                left: 0;
+            }
+
+            @include respond-to(m) {
+                $size: 1.8666vw;
+
+                width: $size;
+                height: $size;
+                border-width: 0.3vw;
+            }
+        }
+    }
+}

@@ -1,0 +1,110 @@
+// todo 헤라 스토리와 다른 swiper 나오면 pages/hera에 따로 넣어버리기
+@use "../common" as *;
+
+.ap-swiper {
+    $bullet-pc: gap-in(13, $wide);
+    $bullet-mo: gap-in(16, $medium);
+
+    // border: 1px solid aqua;
+    position: relative;
+
+    &__inner {
+        overflow: hidden;
+    }
+
+    .swiper {
+        // &-wrapper {}
+
+        &-slide {
+            // border: 10px solid brown;
+            box-sizing: border-box;
+        }
+
+        &-pagination {
+            &-bullet {
+                width: $bullet-pc;
+                height: $bullet-pc;
+
+                // width: clamp(4px, $bullet-pc, 13px);
+                // height: clamp(4px, $bullet-pc, 13px);
+                background-color: $mid-grey;
+                opacity: 1;
+                @include respond-to(m) {
+                    width: $bullet-mo;
+                    height: $bullet-mo;
+                }
+
+                &-active {
+                    background-color: $dark-grey;
+                }
+            }
+        }
+
+        &-button {
+            $gap-horizontal: gap-in-vw(50, $xxlarge);
+
+            // $gap-vertical: calc(50% - 64px);
+            $gap-vertical: 50%;
+
+            &-prev,
+            &-next {
+                top: $gap-vertical;
+                width: $size;
+                height: $size;
+                background-image: none;
+                border: 3px solid #000;
+                border-right: 0;
+                border-bottom: 0;
+
+                $size: gap-in(40, $wide);
+
+                @include respond-to(m) {
+                    $size: gap-in(40, $medium);
+
+                    width: $size;
+                    height: $size;
+
+                    @include clamp(border-width, 1px, 3px, 750);
+                }
+            }
+
+            &-prev {
+                left: $gap-horizontal;
+                transform: rotate(-45deg);
+
+                @include respond-to(m) {
+                    left: 9px;
+                }
+            }
+
+            &-next {
+                right: $gap-horizontal;
+                transform: rotate(135deg);
+
+                @include respond-to(m) {
+                    right: 9px;
+                }
+            }
+        }
+    }
+
+    &--white {
+        .swiper-pagination {
+            &-bullet {
+                background-color: #ababab;
+                opacity: 1;
+
+                &-active {
+                    background-color: white;
+                }
+            }
+        }
+
+        .swiper-button {
+            &-prev,
+            &-next {
+                border-color: #fff;
+            }
+        }
+    }
+}

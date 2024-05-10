@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+@use "../common" as *;
+
+// ™
+$medium: 720;
+
+.tab-contents .product.attribute.description .value {
+    margin: 0;
+}
+
+.ap-pdp {
+    max-width: $medium + 0;
+    margin: 0 auto;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.025em;
+
+    * {
+        padding: 0;
+        margin: 0;
+        font-style: normal;
+        word-break: keep-all;
+        list-style: none;
+    }
+
+    sup {
+        top: -0.3em;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    blockquote {
+        font-style: normal;
+        color: inherit;
+    }
+
+    @mixin code($class) {
+        font-family: map.get($laneige, $class), sans-serif;
+    }
+
+    @each $class, $fontCode in $laneige {
+        &.ap-#{$class} {
+            @include code(#{$class});
+            @if $class == jp {
+                color: #333;
+            } @else if $class == vn {
+                font-weight: 500;
+            }
+        }
+    }
+}

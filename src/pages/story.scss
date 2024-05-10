@@ -1,0 +1,100 @@
+@charset "UTF-8";
+
+// @import "../../main";
+
+$bg-gradient: linear-gradient(180deg, rgb(0 0 0 / 60%) 0%, rgb(0 0 0 / 30%) 100%);
+
+h2 {
+    width: 90vw;
+    max-width: 1200px;
+    margin-right: -0.5em;
+    font-size: clamp(1rem, 5vw, 5rem);
+    text-align: center;
+    letter-spacing: 0.5em;
+}
+
+section {
+    width: 100%;
+    height: 100vh;
+    border: 1px solid;
+}
+
+.test {
+    position: relative;
+}
+
+article {
+    top: 0;
+    width: 100%;
+    height: 100vh;
+
+    .outer,
+    .inner {
+        width: 100%;
+        height: 100%;
+        overflow-y: hidden;
+    }
+
+    .outer {
+        background-color: #faebd7;
+    }
+
+    .inner {
+        background-color: #5f9ea0;
+    }
+
+    .bg {
+        top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-position: center;
+        background-size: cover;
+    }
+}
+
+.first {
+    .bg {
+        background-image: $bg-gradient, url("../assets/img1.jpg");
+    }
+}
+
+.second {
+    .bg {
+        background-image: $bg-gradient, url("../assets/img2.jpg");
+    }
+}
+
+.third {
+    .bg {
+        background-image: $bg-gradient, url("../assets/img3.jpg");
+    }
+}
+
+.fourth {
+    .bg {
+        background-image: $bg-gradient, url("../assets/img4.jpg");
+    }
+}
+
+.fifth {
+    .bg {
+        background-image: $bg-gradient, url("../assets/img5.jpg");
+        background-position: 50% 45%;
+    }
+}
+
+h2 * {
+    will-change: transform;
+}
+
+.new {
+    color: #7fffd4;
+
+    //   display: none;
+    span {
+        display: block;
+    }
+}
