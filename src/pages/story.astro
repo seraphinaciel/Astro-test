@@ -1,64 +1,120 @@
 ---
-import Layout from '~layouts/Layout.astro';
-import Article from '~components/Article.astro';
-import './story.scss';
+import Layout from "~layouts/Layout.astro";
+import Article from "~components/Article.astro";
+import "./story.scss";
+const numbers = ["first", "second", "third", "fourth", "fifth"];
 ---
 
 <Layout title="Testing">
-<section class="testWrap">
-    <section class="test">
-        <Article title="first" />
-        <Article title="second" />
-        <Article title="third" />
-        <Article title="fourth" />
-        <Article title="fifth" />
+    <section class="testWrap">
+        <section class="test">
+            {numbers.map(num => <Article title={num} />)}
+        </section>
     </section>
-</section>
 
-<section class="new">
-    <p>
-        <span
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque iure, quo tempora
-            cumque ducimus officiis ab dicta corrupti quos sequi aspernatur perferendis deserunt rem
-            doloribus eveniet porro dolore deleniti exercitationem.</span
-        ><span
-            >Deserunt saepe, exercitationem eius sit veniam assumenda, eos non optio aut esse
-            incidunt ullam atque est pariatur ex nostrum doloribus. Assumenda error obcaecati
-            similique a odit qui iure facere corrupti.</span
-        ><span
-            >Ab reprehenderit praesentium qui ad quisquam deleniti minima sit similique? Tempore
-            quae fugiat nihil excepturi maiores architecto odit pariatur nisi hic tenetur, inventore
-            vitae. Accusantium neque eos tempore voluptates ullam!</span
-        ><span
-            >Dolore possimus veniam quidem quisquam quae corrupti porro dicta deserunt consequatur
-            deleniti? Ex amet quos cum, quidem perferendis sed, aperiam harum ducimus magni sunt ut
-            repudiandae corrupti, sint voluptates quasi.</span
-        ><span
-            >Recusandae nobis beatae nam exercitationem excepturi laboriosam qui, numquam tenetur
-            praesentium maiores, in repellendus temporibus repudiandae dolores nihil. Velit tempore
-            ut fugiat maiores perspiciatis ipsa itaque ea. Laborum, necessitatibus.
-            Voluptatem!</span
-        ><span
-            >Sed neque consectetur, porro impedit cum, aspernatur, voluptate dolor cupiditate
-            explicabo fuga delectus velit recusandae incidunt nihil suscipit possimus quaerat fugiat
-            unde. Numquam blanditiis aspernatur similique culpa doloremque quis adipisci!</span
-        ><span
-            >Vitae sit maiores recusandae? Incidunt animi id voluptatem earum nostrum ipsum
-            blanditiis placeat, possimus corrupti. Dolores numquam, perferendis excepturi,
-            voluptatum iste sit, quas doloribus aspernatur ex quisquam esse eius aut!</span
-        ><span
-            >Beatae eligendi ipsa similique suscipit excepturi minus animi in nam nostrum voluptates
-            tempora doloribus consequuntur esse quisquam fugit iure, molestias, accusantium totam
-            alias sit reprehenderit molestiae omnis voluptatum? Inventore, nostrum?</span
-        ><span
-            >Ipsa atque facere et ullam nam voluptatem doloribus reiciendis voluptates. Ex quasi cum
-            laboriosam quo minus soluta rerum expedita amet ducimus eaque, debitis, ut quibusdam
-            molestias accusantium, numquam odit? Ex?</span
-        ><span
-            >Quaerat natus, ut nihil libero, aliquid reiciendis, quidem sed optio rerum deleniti
-            provident! Odio cum temporibus at totam illum porro quae quos? Illum fugit quidem ipsa
-            aliquid? Laborum, dignissimos in.</span
-        >
-    </p>
-</section>
+    <script>
+        import { gsap } from "gsap";
+        import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        let items = document.querySelectorAll(".test-item"),
+            bg = document.querySelectorAll(".bg"),
+            outer = gsap.utils.toArray(".outer");
+
+        const animations = {
+            in: { opacity: [0, 1], y: [100, 0], y5: [5, 0] },
+            out: { opacity: [1, 0], y: [0, 100], y5: [0, 5] },
+        };
+
+        gsap.set(outer, { yPercent: 0, autoAlpha: 0 });
+        gsap.set(bg, { yPercent: 0 });
+
+        const animateElement = (item, ani) => {
+            gsap.fromTo(
+                item.querySelector("h2"),
+                { yPercent: ani.y5[0] },
+                { yPercent: ani.y5[1], delay: 1.6 },
+            );
+
+            gsap.fromTo(
+                item.querySelector(".outer"),
+                { yPercent: ani.y[0], autoAlpha: ani.opacity[0], ease: "power3.out" },
+                {
+                    yPercent: ani.y[1],
+                    autoAlpha: ani.opacity[1],
+                    ease: "power3.out",
+                    duration: 0.5,
+                },
+            );
+
+            gsap.fromTo(
+                item.querySelector(".bg"),
+                { yPercent: ani.y[0] },
+                { yPercent: ani.y[1], duration: 1 },
+            );
+        };
+
+        items.forEach(item => {
+            ScrollTrigger.create({
+                trigger: item,
+                toggleActions: "restart pause resume reverse",
+                start: "top 0%",
+                end: "+=" + item.clientHeight / 0.8,
+                markers: true,
+                pin: true,
+
+                onEnter: () => animateElement(item, animations.in),
+                onLeaveBack: () => animateElement(item, animations.out),
+            });
+        });
+    </script>
+
+    <section class="new">
+        <p>
+            <span
+                >Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque iure, quo
+                tempora cumque ducimus officiis ab dicta corrupti quos sequi aspernatur perferendis
+                deserunt rem doloribus eveniet porro dolore deleniti exercitationem.</span
+            ><span
+                >Deserunt saepe, exercitationem eius sit veniam assumenda, eos non optio aut esse
+                incidunt ullam atque est pariatur ex nostrum doloribus. Assumenda error obcaecati
+                similique a odit qui iure facere corrupti.</span
+            ><span
+                >Ab reprehenderit praesentium qui ad quisquam deleniti minima sit similique? Tempore
+                quae fugiat nihil excepturi maiores architecto odit pariatur nisi hic tenetur,
+                inventore vitae. Accusantium neque eos tempore voluptates ullam!</span
+            ><span
+                >Dolore possimus veniam quidem quisquam quae corrupti porro dicta deserunt
+                consequatur deleniti? Ex amet quos cum, quidem perferendis sed, aperiam harum
+                ducimus magni sunt ut repudiandae corrupti, sint voluptates quasi.</span
+            ><span
+                >Recusandae nobis beatae nam exercitationem excepturi laboriosam qui, numquam
+                tenetur praesentium maiores, in repellendus temporibus repudiandae dolores nihil.
+                Velit tempore ut fugiat maiores perspiciatis ipsa itaque ea. Laborum,
+                necessitatibus. Voluptatem!</span
+            ><span
+                >Sed neque consectetur, porro impedit cum, aspernatur, voluptate dolor cupiditate
+                explicabo fuga delectus velit recusandae incidunt nihil suscipit possimus quaerat
+                fugiat unde. Numquam blanditiis aspernatur similique culpa doloremque quis adipisci!</span
+            ><span
+                >Vitae sit maiores recusandae? Incidunt animi id voluptatem earum nostrum ipsum
+                blanditiis placeat, possimus corrupti. Dolores numquam, perferendis excepturi,
+                voluptatum iste sit, quas doloribus aspernatur ex quisquam esse eius aut!</span
+            ><span
+                >Beatae eligendi ipsa similique suscipit excepturi minus animi in nam nostrum
+                voluptates tempora doloribus consequuntur esse quisquam fugit iure, molestias,
+                accusantium totam alias sit reprehenderit molestiae omnis voluptatum? Inventore,
+                nostrum?</span
+            ><span
+                >Ipsa atque facere et ullam nam voluptatem doloribus reiciendis voluptates. Ex quasi
+                cum laboriosam quo minus soluta rerum expedita amet ducimus eaque, debitis, ut
+                quibusdam molestias accusantium, numquam odit? Ex?</span
+            ><span
+                >Quaerat natus, ut nihil libero, aliquid reiciendis, quidem sed optio rerum deleniti
+                provident! Odio cum temporibus at totam illum porro quae quos? Illum fugit quidem
+                ipsa aliquid? Laborum, dignissimos in.</span
+            >
+        </p>
+    </section>
 </Layout>

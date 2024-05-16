@@ -1,93 +1,87 @@
 @charset "UTF-8";
 
-// @import "../../main";
+@use "../styles/_common" as *;
 
-$bg-gradient: linear-gradient(180deg, rgb(0 0 0 / 60%) 0%, rgb(0 0 0 / 30%) 100%);
+$bg-gradient: linear-gradient(180deg, rgba(235, 200, 104, 0.6) 0%, rgba(50, 174, 212, 0.3) 100%);
+$bg-gradient-white: linear-gradient(180deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 30%) 100%);
 
-h2 {
-    width: 90vw;
-    max-width: 1200px;
-    margin-right: -0.5em;
-    font-size: clamp(1rem, 5vw, 5rem);
-    text-align: center;
-    letter-spacing: 0.5em;
-}
-
-section {
+.testWrap {
+    @include flex-column;
     width: 100%;
-    height: 100vh;
-    border: 1px solid;
-}
-
-.test {
     position: relative;
-}
+    z-index: 1;
+    box-sizing: border-box;
 
-article {
-    top: 0;
-    width: 100%;
-    height: 100vh;
-
-    .outer,
-    .inner {
+    .test {
+        @include flex-column;
         width: 100%;
-        height: 100%;
-        overflow-y: hidden;
     }
 
-    .outer {
-        background-color: #faebd7;
+    article {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+        // border: 10px dashed black;
+
+        .outer,
+        .inner {
+            width: 100%;
+            height: 100%;
+        }
+        .outer {
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .inner {
+            background: $bg-gradient-white;
+        }
+        .bg {
+            @include flex(center, center);
+            // @include pos-abs;
+            width: 100vw;
+            height: 100vh;
+            background-position: center;
+            will-change: transform;
+            background-size: cover;
+        }
+
+        h2 {
+            font-size: clamp(1rem, 5vw, 5rem);
+            text-align: center;
+            letter-spacing: 0.5em;
+            width: 95%;
+            padding: 3rem;
+            margin: 0 auto;
+            box-sizing: border-box;
+            max-width: 40rem;
+            position: relative;
+            color: white;
+            text-transform: uppercase;
+        }
     }
 
-    .inner {
-        background-color: #5f9ea0;
-    }
-
-    .bg {
-        top: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        background-position: center;
-        background-size: cover;
-    }
-}
-
-.first {
-    .bg {
+    .first .bg {
         background-image: $bg-gradient, url("../assets/img1.jpg");
     }
-}
 
-.second {
-    .bg {
+    .second .bg {
         background-image: $bg-gradient, url("../assets/img2.jpg");
     }
-}
 
-.third {
-    .bg {
+    .third .bg {
         background-image: $bg-gradient, url("../assets/img3.jpg");
     }
-}
 
-.fourth {
-    .bg {
+    .fourth .bg {
         background-image: $bg-gradient, url("../assets/img4.jpg");
     }
-}
 
-.fifth {
-    .bg {
+    .fifth .bg {
         background-image: $bg-gradient, url("../assets/img5.jpg");
         background-position: 50% 45%;
     }
-}
-
-h2 * {
-    will-change: transform;
 }
 
 .new {

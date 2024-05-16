@@ -108,7 +108,7 @@
 // Flex * @include flex(end, center);
 // ============================================================
 @mixin flex($justify: null, $align: null) {
-    @if ($justify == null & $align == null) {
+    @if ($justify == null) {
         place-content: center;
     }
     display: flex;
